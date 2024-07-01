@@ -2,6 +2,7 @@ package test.java.com.model;
 
 import main.java.com.model.Actor;
 import main.java.com.service.DataImporter;
+import main.java.com.service.ActorSearchService;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -9,11 +10,13 @@ import static org.junit.Assert.*;
 public class ActorSearchTest {
 
     private DataImporter importer;
+    private ActorSearchService actorSearchService;
 
     @Before
     public void setUp() {
         importer = new DataImporter();
-        importer.loadData("C:\\Users\\flore\\IdeaProjects\\Filmprojekt\\src\\main\\resources\\movieproject2024.db"); // Adjust the path as needed
+        importer.loadData("src/main/resources/movieproject2024.db"); // Adjust the path as needed
+        actorSearchService = new ActorSearchService(importer.getActors());
     }
 
     @Test
@@ -22,7 +25,7 @@ public class ActorSearchTest {
         String actorName = "Matthew McConaughey"; // Use an existing actor name from your dataset
 
         // Act
-        Actor actor = importer.searchActorByName(actorName);
+        Actor actor = actorSearchService.searchActorByName(actorName);
 
         // Assert
         assertNotNull("main.java.com.model.Actor should be found", actor);

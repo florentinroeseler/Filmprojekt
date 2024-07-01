@@ -34,6 +34,10 @@ public class DataImporter {
         return actors;
     }
 
+    public List<Director> getDirectors() {
+        return directors;
+    }
+
     private String[] parseLine(String line) {
         List<String> tokens = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
@@ -122,87 +126,87 @@ public class DataImporter {
         }
     }
 
-    public Actor searchActorByName(String name) {
-        for (Actor actor : actors) {
-            if (actor.getName().equalsIgnoreCase(name)) {
-                return actor;
-            }
-        }
-        return null;
-    }
-
-    public Film searchFilmByTitle(String title) {
-        for (Film film : films) {
-            if (film.getTitle().equalsIgnoreCase(title)) {
-                return film;
-            }
-        }
-        return null;
-    }
-
-    public Director searchDirectorByName(String name) {
-        for (Director director : directors) {
-            if (director.getName().equalsIgnoreCase(name)) {
-                return director;
-            }
-        }
-        return null;
-    }
-
-    public void printFilmNetwork(String title) {
-        Film film = searchFilmByTitle(title);
-        if (film != null) {
-            Set<Actor> actorsInFilm = new HashSet<>(film.getActors());
-            Set<Film> relatedFilms = new HashSet<>();
-
-            // Find films related to these actors
-            for (Actor actor : actorsInFilm) {
-                relatedFilms.addAll(actor.getFilms());
-            }
-
-            relatedFilms.remove(film); // Remove the original film from the related films
-
-            System.out.println("Actors in " + film.getTitle() + ":");
-            for (Actor actor : actorsInFilm) {
-                System.out.println(" - " + actor.getName());
-            }
-
-            System.out.println("Related Films:");
-            for (Film relatedFilm : relatedFilms) {
-                System.out.println(" - " + relatedFilm.getTitle());
-            }
-
-            // Print statements for debugging
-            System.out.println("main.java.com.model.Film is: " + (film == null ? "null" : "not null"));
-            System.out.println("Number of actors in film: " + actorsInFilm.size());
-            System.out.println("Number of related films: " + relatedFilms.size());
-        } else {
-            System.out.println("main.java.com.model.Film not found.");
-        }
-    }
-
-    public void printActorNetwork(String actorName) {
-        Actor actor = searchActorByName(actorName);
-        if (actor != null) {
-            Set<Film> filmsActedIn = new HashSet<>(actor.getFilms());
-            Set<Actor> relatedActors = new HashSet<>();
-
-            // Find actors related to these films
-            for (Film film : filmsActedIn) {
-                relatedActors.addAll(film.getActors());
-            }
-
-            System.out.println("Films acted in by " + actor.getName() + ":");
-            for (Film film : filmsActedIn) {
-                System.out.println(" - " + film.getTitle());
-            }
-
-            System.out.println("Related Actors:");
-            for (Actor relatedActor : relatedActors) {
-                System.out.println(" - " + relatedActor.getName());
-            }
-        } else {
-            System.out.println("main.java.com.model.Actor not found.");
-        }
-    }
+//    public Actor searchActorByName(String name) {
+//        for (Actor actor : actors) {
+//            if (actor.getName().equalsIgnoreCase(name)) {
+//                return actor;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public Film searchFilmByTitle(String title) {
+//        for (Film film : films) {
+//            if (film.getTitle().equalsIgnoreCase(title)) {
+//                return film;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public Director searchDirectorByName(String name) {
+//        for (Director director : directors) {
+//            if (director.getName().equalsIgnoreCase(name)) {
+//                return director;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public void printFilmNetwork(String title) {
+//        Film film = searchFilmByTitle(title);
+//        if (film != null) {
+//            Set<Actor> actorsInFilm = new HashSet<>(film.getActors());
+//            Set<Film> relatedFilms = new HashSet<>();
+//
+//            // Find films related to these actors
+//            for (Actor actor : actorsInFilm) {
+//                relatedFilms.addAll(actor.getFilms());
+//            }
+//
+//            relatedFilms.remove(film); // Remove the original film from the related films
+//
+//            System.out.println("Actors in " + film.getTitle() + ":");
+//            for (Actor actor : actorsInFilm) {
+//                System.out.println(" - " + actor.getName());
+//            }
+//
+//            System.out.println("Related Films:");
+//            for (Film relatedFilm : relatedFilms) {
+//                System.out.println(" - " + relatedFilm.getTitle());
+//            }
+//
+//            // Print statements for debugging
+//            System.out.println("main.java.com.model.Film is: " + (film == null ? "null" : "not null"));
+//            System.out.println("Number of actors in film: " + actorsInFilm.size());
+//            System.out.println("Number of related films: " + relatedFilms.size());
+//        } else {
+//            System.out.println("main.java.com.model.Film not found.");
+//        }
+//    }
+//
+//    public void printActorNetwork(String actorName) {
+//        Actor actor = searchActorByName(actorName);
+//        if (actor != null) {
+//            Set<Film> filmsActedIn = new HashSet<>(actor.getFilms());
+//            Set<Actor> relatedActors = new HashSet<>();
+//
+//            // Find actors related to these films
+//            for (Film film : filmsActedIn) {
+//                relatedActors.addAll(film.getActors());
+//            }
+//
+//            System.out.println("Films acted in by " + actor.getName() + ":");
+//            for (Film film : filmsActedIn) {
+//                System.out.println(" - " + film.getTitle());
+//            }
+//
+//            System.out.println("Related Actors:");
+//            for (Actor relatedActor : relatedActors) {
+//                System.out.println(" - " + relatedActor.getName());
+//            }
+//        } else {
+//            System.out.println("main.java.com.model.Actor not found.");
+//        }
+//    }
 }

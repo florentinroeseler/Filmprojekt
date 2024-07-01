@@ -2,6 +2,7 @@ package test.java.com.model;
 
 import main.java.com.model.Director;
 import main.java.com.service.DataImporter;
+import main.java.com.service.DirectorSearchService;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -9,11 +10,13 @@ import static org.junit.Assert.*;
 public class DirectorSearchTest {
 
     private DataImporter importer;
+    private DirectorSearchService directorSearchService;
 
     @Before
     public void setUp() {
         importer = new DataImporter();
-        importer.loadData("C:\\Users\\flore\\IdeaProjects\\Filmprojekt\\src\\main\\resources\\movieproject2024.db"); // Adjust the path as needed
+        importer.loadData("src/main/resources/movieproject2024.db"); // Adjust the path as needed
+        directorSearchService = new DirectorSearchService(importer.getDirectors());
     }
 
     @Test
@@ -22,7 +25,7 @@ public class DirectorSearchTest {
         String directorName = "Christopher Nolan"; // Use an existing director name from your dataset
 
         // Act
-        Director director = importer.searchDirectorByName(directorName);
+        Director director = directorSearchService.searchDirectorByName(directorName);
 
         // Assert
         assertNotNull("main.java.com.model.Director should be found", director);

@@ -2,6 +2,7 @@ package test.java.com.model;
 
 import main.java.com.model.Film;
 import main.java.com.service.DataImporter;
+import main.java.com.service.FilmSearchService;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -9,11 +10,13 @@ import static org.junit.Assert.*;
 public class FilmSearchTest {
 
     private DataImporter importer;
+    private FilmSearchService filmSearchService;
 
     @Before
     public void setUp() {
         importer = new DataImporter();
-        importer.loadData("C:\\Users\\flore\\IdeaProjects\\Filmprojekt\\src\\main\\resources\\movieproject2024.db"); // Adjust the path as needed
+        importer.loadData("src/main/resources/movieproject2024.db"); // Adjust the path as needed
+        filmSearchService = new FilmSearchService(importer.getFilms());
     }
 
     @Test
@@ -22,7 +25,7 @@ public class FilmSearchTest {
         String filmTitle = "Interstellar"; // Use an existing film title from your dataset
 
         // Act
-        Film film = importer.searchFilmByTitle(filmTitle);
+        Film film = filmSearchService.searchFilmByTitle(filmTitle);
 
         // Assert
         assertNotNull("main.java.com.model.Film should be found", film);

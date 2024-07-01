@@ -1,3 +1,5 @@
+import main.java.com.model.Actor;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

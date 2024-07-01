@@ -1,3 +1,5 @@
+import main.java.com.model.Film;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

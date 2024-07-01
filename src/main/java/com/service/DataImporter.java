@@ -1,3 +1,9 @@
+package main.java.com.service;
+
+import main.java.com.model.Actor;
+import main.java.com.model.Director;
+import main.java.com.model.Film;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,6 +24,14 @@ public class DataImporter {
         this.filmMap = new HashMap<>();
         this.actorMap = new HashMap<>();
         this.directorMap = new HashMap<>();
+    }
+
+    public List<Film> getFilms() {
+        return films;
+    }
+
+    public List<Actor> getActors() {
+        return actors;
     }
 
     private String[] parseLine(String line) {
@@ -87,9 +101,6 @@ public class DataImporter {
                                 Film filmForActor = filmMap.get(mId);
                                 actorInFilm.addFilm(filmForActor);
                                 filmForActor.addActor(actorInFilm);
-
-                                // Print statement for debugging
-                                System.out.println("Added actor " + actorInFilm.getName() + " to film " + filmForActor.getTitle());
                             }
                             break;
                         case "New_Entity: \"director_id\",\"movie_id\"":
@@ -162,11 +173,11 @@ public class DataImporter {
             }
 
             // Print statements for debugging
-            System.out.println("Film is: " + (film == null ? "null" : "not null"));
+            System.out.println("main.java.com.model.Film is: " + (film == null ? "null" : "not null"));
             System.out.println("Number of actors in film: " + actorsInFilm.size());
             System.out.println("Number of related films: " + relatedFilms.size());
         } else {
-            System.out.println("Film not found.");
+            System.out.println("main.java.com.model.Film not found.");
         }
     }
 
@@ -191,7 +202,7 @@ public class DataImporter {
                 System.out.println(" - " + relatedActor.getName());
             }
         } else {
-            System.out.println("Actor not found.");
+            System.out.println("main.java.com.model.Actor not found.");
         }
     }
 }

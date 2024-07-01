@@ -1,13 +1,15 @@
+package main.java.com.model;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Actor {
+public class Director {
     private int id;
     private String name;
     private List<Film> films;
 
-    public Actor(int id, String name) {
+    public Director(int id, String name) {
         this.id = id;
         this.name = name;
         this.films = new ArrayList<>();
@@ -27,8 +29,8 @@ public class Actor {
 
     public void addFilm(Film film) {
         this.films.add(film);
-        if (!film.getActors().contains(this)) {
-            film.addActor(this);
+        if (!film.getDirectors().contains(this)) {
+            film.addDirector(this);
         }
     }
 
@@ -41,8 +43,8 @@ public class Actor {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Actor actor = (Actor) o;
-        return id == actor.id;
+        Director director = (Director) o;
+        return id == director.id;
     }
 
     @Override

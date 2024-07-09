@@ -4,21 +4,27 @@ import main.java.com.model.Actor;
 import main.java.com.model.Film;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Service class for printing film and actor networks.
+ */
 public class NetworkService {
 
     private FilmSearchService filmSearchService;
     private ActorSearchService actorSearchService;
 
+    // Constructor
     public NetworkService(FilmSearchService filmSearchService, ActorSearchService actorSearchService) {
         this.filmSearchService = filmSearchService;
         this.actorSearchService = actorSearchService;
     }
 
-    public void printFilmNetwork(String title) {
-        Film film = filmSearchService.searchFilmByTitle(title);
+    // Prints the network of a film, including its actors and related films.
+    public void printFilmNetwork(int filmId) {
+        Film film = filmSearchService.searchFilmById(filmId);
         if (film != null) {
             Set<Actor> actorsInFilm = new HashSet<>(film.getActors());
             Set<Film> relatedFilms = new HashSet<>();
@@ -28,29 +34,38 @@ public class NetworkService {
                 relatedFilms.addAll(actor.getFilms());
             }
 
-            relatedFilms.remove(film); // Remove the original film from the related films
+            // Remove the original film from the related films
+            relatedFilms.remove(film);
 
-            System.out.println("Actors in " + film.getTitle() + ":");
-            for (Actor actor : actorsInFilm) {
-                System.out.println(" - " + actor.getName());
+            // Print actors in the film
+            System.out.println();
+            System.out.print("Schauspieler: ");
+            Iterator<Actor> actorIterator = actorsInFilm.iterator();
+            while (actorIterator.hasNext()) {
+                System.out.print(actorIterator.next().getName());
+                if (actorIterator.hasNext()) {
+                    System.out.print(", ");
+                }
             }
 
-            System.out.println("Related Films:");
-            for (Film relatedFilm : relatedFilms) {
-                System.out.println(" - " + relatedFilm.getTitle());
+            // Print related films
+            System.out.println();
+            System.out.print("Filme: ");
+            Iterator<Film> filmIterator = relatedFilms.iterator();
+            while (filmIterator.hasNext()) {
+                System.out.print(filmIterator.next().getTitle());
+                if (filmIterator.hasNext()) {
+                    System.out.print(", ");
+                }
             }
-
-            // Print statements for debugging
-            System.out.println("Film is: " + (film == null ? "null" : "not null"));
-            System.out.println("Number of actors in film: " + actorsInFilm.size());
-            System.out.println("Number of related films: " + relatedFilms.size());
         } else {
-            System.out.println("Film not found.");
+            System.out.println("Film nicht gefunden.");
         }
     }
 
-    public void printActorNetwork(String actorName) {
-        Actor actor = actorSearchService.searchActorByName(actorName);
+    // Prints the network of an actor, including the films they have acted in and related actors.
+    public void printActorNetwork(int actorId) {
+        Actor actor = actorSearchService.searchActorById(actorId);
         if (actor != null) {
             Set<Film> filmsActedIn = new HashSet<>(actor.getFilms());
             Set<Actor> relatedActors = new HashSet<>();
@@ -60,17 +75,32 @@ public class NetworkService {
                 relatedActors.addAll(film.getActors());
             }
 
-            System.out.println("Films acted in by " + actor.getName() + ":");
-            for (Film film : filmsActedIn) {
-                System.out.println(" - " + film.getTitle());
+            // Remove the original actor from the related actors
+            relatedActors.remove(actor);
+
+            // Print films the actor has acted in
+            System.out.println();
+            System.out.print("Filme: ");
+            Iterator<Film> filmIterator = filmsActedIn.iterator();
+            while (filmIterator.hasNext()) {
+                System.out.print(filmIterator.next().getTitle());
+                if (filmIterator.hasNext()) {
+                    System.out.print(", ");
+                }
             }
 
-            System.out.println("Related Actors:");
-            for (Actor relatedActor : relatedActors) {
-                System.out.println(" - " + relatedActor.getName());
+            // Print related actors
+            System.out.println();
+            System.out.print("Schauspieler: ");
+            Iterator<Actor> actorIterator = relatedActors.iterator();
+            while (actorIterator.hasNext()) {
+                System.out.print(actorIterator.next().getName());
+                if (actorIterator.hasNext()) {
+                    System.out.print(", ");
+                }
             }
         } else {
-            System.out.println("Actor not found.");
+            System.out.println("Schauspieler nicht gefunden.");
         }
     }
 }

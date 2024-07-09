@@ -9,6 +9,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Service class for importing data from a file and populating lists of films, actors, and directors.
+ */
 public class DataImporter {
     private List<Film> films;
     private List<Actor> actors;
@@ -17,6 +20,7 @@ public class DataImporter {
     private Map<Integer, Actor> actorMap;
     private Map<Integer, Director> directorMap;
 
+    // Constructs a new DataImporter object and initializes the lists and maps.
     public DataImporter() {
         this.films = new ArrayList<>();
         this.actors = new ArrayList<>();
@@ -26,6 +30,7 @@ public class DataImporter {
         this.directorMap = new HashMap<>();
     }
 
+    // Getters
     public List<Film> getFilms() {
         return films;
     }
@@ -38,6 +43,7 @@ public class DataImporter {
         return directors;
     }
 
+    // Parses a line of text into an array of strings, handling quoted commas.
     private String[] parseLine(String line) {
         List<String> tokens = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
@@ -57,8 +63,9 @@ public class DataImporter {
         return tokens.toArray(new String[0]);
     }
 
+    // Loads data from the specified file path and populates the lists of films, actors, and directors.
     public void loadData(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) { // Open file for reading
             String line;
             String currentEntity = "";
             while ((line = br.readLine()) != null) {
@@ -67,40 +74,45 @@ public class DataImporter {
                 } else {
                     switch (currentEntity) {
                         case "New_Entity: \"actor_id\",\"actor_name\"":
-                            String[] actorData = parseLine(line);
-                            int actorId = Integer.parseInt(actorData[0].replaceAll("\"", ""));
-                            String actorName = actorData[1].replaceAll("\"", "");
+                            // Parse actor data and add to list and map
+                            String[] actorData = parseLine(line); // Parse line into array of strings
+                            int actorId = Integer.parseInt(actorData[0].replaceAll("\"", "")); // Remove quotes from ID and parse to int
+                            String actorName = actorData[1].replaceAll("\"", ""); // Remove quotes from name
                             Actor actor = new Actor(actorId, actorName);
                             actors.add(actor);
                             actorMap.put(actorId, actor);
                             break;
                         case "New_Entity: \"movie_id\",\"movie_title\",\"movie_plot\",\"genre_name\",\"movie_released\",\"movie_imdbVotes\",\"movie_imdbRating\"":
-                            String[] filmData = parseLine(line);
-                            int movieId = Integer.parseInt(filmData[0].replaceAll("\"", ""));
-                            String movieTitle = filmData[1].replaceAll("\"", "");
-                            String moviePlot = filmData[2].replaceAll("\"", "");
-                            String genreName = filmData[3].replaceAll("\"", "");
-                            String movieReleased = filmData[4].replaceAll("\"", "");
-                            int movieImdbVotes = filmData[5].replaceAll("\"", "").isEmpty() ? 0 : Integer.parseInt(filmData[5].replaceAll("\"", ""));
-                            double movieImdbRating = filmData[6].replaceAll("\"", "").isEmpty() ? 0.0 : Double.parseDouble(filmData[6].replaceAll("\"", ""));
+                            // Parse film data and add to list and map
+                            String[] filmData = parseLine(line); // Parse line into array of strings
+                            int movieId = Integer.parseInt(filmData[0].replaceAll("\"", "")); // Remove quotes from ID and parse to int
+                            String movieTitle = filmData[1].replaceAll("\"", ""); // Remove quotes from title
+                            String moviePlot = filmData[2].replaceAll("\"", ""); // Remove quotes from plot
+                            String genreName = filmData[3].replaceAll("\"", ""); // Remove quotes from genre
+                            String movieReleased = filmData[4].replaceAll("\"", ""); // Remove quotes from release date
+                            int movieImdbVotes = filmData[5].replaceAll("\"", "").isEmpty() ? 0 : Integer.parseInt(filmData[5].replaceAll("\"", "")); // Remove quotes from votes and parse to int
+                            double movieImdbRating = filmData[6].replaceAll("\"", "").isEmpty() ? 0.0 : Double.parseDouble(filmData[6].replaceAll("\"", "")); // Remove quotes from rating and parse to double
                             Film film = new Film(movieId, movieTitle, moviePlot, genreName, movieReleased, movieImdbVotes, movieImdbRating);
                             if(filmMap.containsKey(movieId)) break;
                             films.add(film);
                             filmMap.put(movieId, film);
                             break;
                         case "New_Entity: \"director_id\",\"director_name\"":
-                            String[] directorData = parseLine(line);
-                            int directorId = Integer.parseInt(directorData[0].replaceAll("\"", ""));
-                            String directorName = directorData[1].replaceAll("\"", "");
+                            // Parse director data and add to list and map
+                            String[] directorData = parseLine(line); // Parse line into array of strings
+                            int directorId = Integer.parseInt(directorData[0].replaceAll("\"", "")); // Remove quotes from ID and parse to int
+                            String directorName = directorData[1].replaceAll("\"", ""); // Remove quotes from name
                             Director director = new Director(directorId, directorName);
                             directors.add(director);
                             directorMap.put(directorId, director);
                             break;
                         case "New_Entity: \"actor_id\",\"movie_id\"":
-                            String[] actorFilmData = parseLine(line);
-                            int aId = Integer.parseInt(actorFilmData[0].replaceAll("\"", ""));
-                            int mId = Integer.parseInt(actorFilmData[1].replaceAll("\"", ""));
-                            if (actorMap.containsKey(aId) && filmMap.containsKey(mId)) {
+                            // Link actor to film
+                            String[] actorFilmData = parseLine(line); // Parse line into array of strings
+                            int aId = Integer.parseInt(actorFilmData[0].replaceAll("\"", "")); // Remove quotes from actor ID and parse to int
+                            int mId = Integer.parseInt(actorFilmData[1].replaceAll("\"", "")); // Remove quotes from movie ID and parse to int
+                            if (actorMap.containsKey(aId) && filmMap.containsKey(mId)) { // Check if actor and film exist
+                                // Add actor to film and film to actor
                                 Actor actorInFilm = actorMap.get(aId);
                                 Film filmForActor = filmMap.get(mId);
                                 actorInFilm.addFilm(filmForActor);
@@ -108,10 +120,12 @@ public class DataImporter {
                             }
                             break;
                         case "New_Entity: \"director_id\",\"movie_id\"":
-                            String[] directorFilmData = parseLine(line);
-                            int dId = Integer.parseInt(directorFilmData[0].replaceAll("\"", ""));
-                            int movId = Integer.parseInt(directorFilmData[1].replaceAll("\"", ""));
-                            if (directorMap.containsKey(dId) && filmMap.containsKey(movId)) {
+                            // Link director to film
+                            String[] directorFilmData = parseLine(line); // Parse line into array of strings
+                            int dId = Integer.parseInt(directorFilmData[0].replaceAll("\"", "")); // Remove quotes from director ID and parse to int
+                            int movId = Integer.parseInt(directorFilmData[1].replaceAll("\"", "")); // Remove quotes from movie ID and parse to int
+                            if (directorMap.containsKey(dId) && filmMap.containsKey(movId)) { // Check if director and film exist
+                                // Add director to film and film to director
                                 Director directorInFilm = directorMap.get(dId);
                                 Film filmForDirector = filmMap.get(movId);
                                 directorInFilm.addFilm(filmForDirector);
@@ -121,92 +135,8 @@ public class DataImporter {
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {   // Catch any IO exceptions
+            e.printStackTrace();    // Print the stack trace to error output
         }
     }
-
-//    public Actor searchActorByName(String name) {
-//        for (Actor actor : actors) {
-//            if (actor.getName().equalsIgnoreCase(name)) {
-//                return actor;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public Film searchFilmByTitle(String title) {
-//        for (Film film : films) {
-//            if (film.getTitle().equalsIgnoreCase(title)) {
-//                return film;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public Director searchDirectorByName(String name) {
-//        for (Director director : directors) {
-//            if (director.getName().equalsIgnoreCase(name)) {
-//                return director;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public void printFilmNetwork(String title) {
-//        Film film = searchFilmByTitle(title);
-//        if (film != null) {
-//            Set<Actor> actorsInFilm = new HashSet<>(film.getActors());
-//            Set<Film> relatedFilms = new HashSet<>();
-//
-//            // Find films related to these actors
-//            for (Actor actor : actorsInFilm) {
-//                relatedFilms.addAll(actor.getFilms());
-//            }
-//
-//            relatedFilms.remove(film); // Remove the original film from the related films
-//
-//            System.out.println("Actors in " + film.getTitle() + ":");
-//            for (Actor actor : actorsInFilm) {
-//                System.out.println(" - " + actor.getName());
-//            }
-//
-//            System.out.println("Related Films:");
-//            for (Film relatedFilm : relatedFilms) {
-//                System.out.println(" - " + relatedFilm.getTitle());
-//            }
-//
-//            // Print statements for debugging
-//            System.out.println("main.java.com.model.Film is: " + (film == null ? "null" : "not null"));
-//            System.out.println("Number of actors in film: " + actorsInFilm.size());
-//            System.out.println("Number of related films: " + relatedFilms.size());
-//        } else {
-//            System.out.println("main.java.com.model.Film not found.");
-//        }
-//    }
-//
-//    public void printActorNetwork(String actorName) {
-//        Actor actor = searchActorByName(actorName);
-//        if (actor != null) {
-//            Set<Film> filmsActedIn = new HashSet<>(actor.getFilms());
-//            Set<Actor> relatedActors = new HashSet<>();
-//
-//            // Find actors related to these films
-//            for (Film film : filmsActedIn) {
-//                relatedActors.addAll(film.getActors());
-//            }
-//
-//            System.out.println("Films acted in by " + actor.getName() + ":");
-//            for (Film film : filmsActedIn) {
-//                System.out.println(" - " + film.getTitle());
-//            }
-//
-//            System.out.println("Related Actors:");
-//            for (Actor relatedActor : relatedActors) {
-//                System.out.println(" - " + relatedActor.getName());
-//            }
-//        } else {
-//            System.out.println("main.java.com.model.Actor not found.");
-//        }
-//    }
 }

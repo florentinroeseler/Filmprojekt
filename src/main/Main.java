@@ -11,21 +11,32 @@ import main.java.com.service.NetworkService;
 
 import java.util.List;
 
+/**
+ * Main class for Filmprojekt.
+ */
 public class Main {
     public static void main(String[] args) {
+        // Initialize the DataImporter and load data from the specified file
         DataImporter importer = new DataImporter();
         importer.loadData("src/main/resources/movieproject2024.db");
 
+        // Initialize the search services with the imported data
         ActorSearchService actorSearchService = new ActorSearchService(importer.getActors());
         FilmSearchService filmSearchService = new FilmSearchService(importer.getFilms());
         DirectorSearchService directorSearchService = new DirectorSearchService(importer.getDirectors());
         NetworkService networkService = new NetworkService(filmSearchService, actorSearchService);
 
+        // Handle command-line arguments if provided
         if (args.length > 0) {
             handleArgs(importer, actorSearchService, filmSearchService, directorSearchService, networkService, args);
         }
+        else {
+            System.out.println("No arguments provided. Please use the following format:");
+            System.out.println("--filmnetzwerk=<filmId> --schauspielernetzwerk=<actorId> --schauspielersuche=<name> --filmsuche=<title> --regisseursuche=<name>");
+        }
     }
 
+    // Handles the command-line arguments to perform the appropriate actions.
     private static void handleArgs(DataImporter importer, ActorSearchService actorSearchService, FilmSearchService filmSearchService, DirectorSearchService directorSearchService, NetworkService networkService, String[] args) {
         for (String arg : args) {
             if (arg.startsWith("--filmnetzwerk=")) {
@@ -60,6 +71,7 @@ public class Main {
         }
     }
 
+    // Searches for actors by name and prints the results.
     private static void searchAndPrintActors(ActorSearchService actorSearchService, String name) {
         List<Actor> actors = actorSearchService.searchActorByName(name);
         if (!actors.isEmpty()) {
@@ -76,6 +88,7 @@ public class Main {
         }
     }
 
+    // Searches for films by title and prints the results.
     private static void searchAndPrintFilms(FilmSearchService filmSearchService, String title) {
         List<Film> films = filmSearchService.searchFilmByTitle(title);
         if (!films.isEmpty()) {
@@ -93,6 +106,7 @@ public class Main {
         }
     }
 
+    // Searches for directors by name and prints the results.
     private static void searchAndPrintDirectors(DirectorSearchService directorSearchService, String name) {
         List<Director> directors = directorSearchService.searchDirectorByName(name);
         if (!directors.isEmpty()) {
@@ -108,5 +122,4 @@ public class Main {
             System.out.println("Director not found.");
         }
     }
-
 }

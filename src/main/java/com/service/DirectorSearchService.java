@@ -28,4 +28,14 @@ public class DirectorSearchService {
         }
         return matchingDirectors;
     }
+
+    // Search director by ID in the list of directors
+    public Director searchDirectorById(int id) {
+        for (Director director : directors) {
+            if (director.getId() == id) {
+                return director;
+            }
+        }
+        return null;
+    }
 }

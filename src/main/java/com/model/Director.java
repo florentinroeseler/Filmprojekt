@@ -1,5 +1,9 @@
 package main.java.com.model;
 
+/**
+ * Class representing an actor involved in films.
+ * This class extends the Person class and provides additional functionality specific to actors.
+ */
 public class Director extends Person {
 
     // Constructor

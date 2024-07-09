@@ -29,6 +29,7 @@ public class ActorSearchService {
         return matchingActors;
     }
 
+    // Search actor by ID in the list of actors
     public Actor searchActorById(int id) {
         for (Actor actor : actors) {
             if (actor.getId() == id) {

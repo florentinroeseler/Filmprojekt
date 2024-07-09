@@ -29,6 +29,7 @@ public class FilmSearchService {
         return matchingFilms;
     }
 
+    // Search film by ID in the list of films
     public Film searchFilmById(int id) {
         for (Film film : films) {
             if (film.getId() == id) {

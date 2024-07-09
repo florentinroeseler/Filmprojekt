@@ -17,14 +17,14 @@ public class ActorSearchTest {
     @Before
     public void setUp() {
         importer = new DataImporter();
-        importer.loadData("src/main/resources/movieproject2024.db"); // Adjust the path as needed
+        importer.loadData("src/main/resources/movieproject2024.db");
         actorSearchService = new ActorSearchService(importer.getActors());
     }
 
     @Test
     public void testSearchActor() {
         // Arrange
-        String actorName = "Matthew McConaughey"; // Use an existing actor name from your dataset
+        String actorName = "Matthew McConaughey";
 
         // Act
         List<Actor> actors = actorSearchService.searchActorByName(actorName);
@@ -45,7 +45,7 @@ public class ActorSearchTest {
     @Test
     public void testSearchActorById() {
         // Arrange
-        int actorId = 10147; // Use an existing actor ID from your dataset
+        int actorId = 10147;
 
         // Act
         Actor actor = actorSearchService.searchActorById(actorId);

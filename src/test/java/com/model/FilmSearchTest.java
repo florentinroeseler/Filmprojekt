@@ -17,14 +17,14 @@ public class FilmSearchTest {
     @Before
     public void setUp() {
         importer = new DataImporter();
-        importer.loadData("src/main/resources/movieproject2024.db"); // Adjust the path as needed
+        importer.loadData("src/main/resources/movieproject2024.db");
         filmSearchService = new FilmSearchService(importer.getFilms());
     }
 
     @Test
     public void testSearchFilm() {
         // Arrange
-        String filmTitle = "Interstellar"; // Use an existing film title from your dataset
+        String filmTitle = "Interstellar";
 
         // Act
         List<Film> films = filmSearchService.searchFilmByTitle(filmTitle);
@@ -45,7 +45,7 @@ public class FilmSearchTest {
     @Test
     public void testSearchFilmById() {
         // Arrange
-        int filmId = 1491; // Use an existing film ID from your dataset
+        int filmId = 1491;
 
         // Act
         Film film = filmSearchService.searchFilmById(filmId);

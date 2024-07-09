@@ -17,14 +17,14 @@ public class DirectorSearchTest {
     @Before
     public void setUp() {
         importer = new DataImporter();
-        importer.loadData("src/main/resources/movieproject2024.db"); // Adjust the path as needed
+        importer.loadData("src/main/resources/movieproject2024.db");
         directorSearchService = new DirectorSearchService(importer.getDirectors());
     }
 
     @Test
     public void testSearchDirector() {
         // Arrange
-        String directorName = "Christopher Nolan"; // Use an existing director name from your dataset
+        String directorName = "Christopher Nolan";
 
         // Act
         List<Director> directors = directorSearchService.searchDirectorByName(directorName);
@@ -45,7 +45,7 @@ public class DirectorSearchTest {
     @Test
     public void testSearchDirectorById() {
         // Arrange
-        int directorId = 28814; // Use an existing director ID from your dataset
+        int directorId = 28814;
 
         // Act
         Director director = directorSearchService.searchDirectorById(directorId);
